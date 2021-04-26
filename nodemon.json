@@ -7,5 +7,5 @@
   "ignore": [
     "src/test"
   ],
-  "exec": "DEBUG=* ts-node"
+  "exec": "ts-node"
 }
