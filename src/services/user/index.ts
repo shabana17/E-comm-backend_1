@@ -1,29 +1,21 @@
 import { Types } from 'mongoose';
 import { USER } from '../../models';
 
-const checkExisting = async (search = {}) => new Promise((resolve, reject) => {
+const getUser = async (search = {}) =>
   USER.findOne(search)
-    .then(resolve)
-    .catch(reject);
-});
+    .lean()
+    .exec();
 
-const saveUser = async (userDetails = {}) => new Promise((resolve, reject) => {
-  const newUser = new USER(userDetails);
-  newUser.save()
-    .then(resolve)
-    .catch(reject);
-});
+const saveUser = async (userDetails = {}) => USER.create(userDetails);
 
-const editUser = async (search = {}, update = {}, options = {}) => new Promise((resolve, reject) => {
+const editUser = async (search = {}, update = {}, options = {}) =>
   USER.findOneAndUpdate(search, update, options)
-    .then(resolve)
-    .catch(reject);
-});
+    .lean()
+    .exec();
 
-const deleteUser = async (id: Types.ObjectId) => new Promise((resolve, reject) => {
+const deleteUser = async (id: Types.ObjectId) =>
   USER.findByIdAndDelete(id)
-    .then(resolve)
-    .catch(reject);
-});
+    .lean()
+    .exec();
 
-export { checkExisting, saveUser, editUser, deleteUser };
+export { getUser, saveUser, editUser, deleteUser };

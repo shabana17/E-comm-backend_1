@@ -1,7 +1,10 @@
 import { Router } from 'express';
-import { cRouter } from '../controllers';
+import { authController, leadController, userController } from '../controllers';
 
 const router = Router();
-router.use('/', cRouter);
+
+router.use('/auth', authController);
+router.use('/user', userController);
+router.use('/lead', leadController);
 
 export { router };

@@ -31,11 +31,9 @@ export const registerValidation = (req: any, res: any, next: any) => {
       .required()
       .default('ACTIVE')
   });
-  const { value, error } = userSchema.validate(req.body);
+  const {error} = userSchema.validate(req.body);
   if (error) {
-    console.log(error);
-    
-    return makeResponse(res, 500, false, error.message);
+    return makeResponse(res, 400, false, error.message);
   }
   next();
 };
@@ -50,9 +48,9 @@ export const loginValidation = (req: any, res: any, next: any) => {
     password: joi.string()
       .required()
   });
-  const { value, error } = loginCredentials.validate(req.body);
+  const {error} = loginCredentials.validate(req.body);
   if (error) {
-    return makeResponse(res, 500, false, error.message);
+    return makeResponse(res, 400, false, error.message);
   }
   next();
 };
@@ -76,9 +74,9 @@ export const editUserValidation = (req: any, res: any, next: any) => {
     status: joi.string()
       .allow('ACTIVE', 'INACTIVE', 'DELETED')
   });
-  const { value, error } = editUser.validate(req.body);
+  const {error} = editUser.validate(req.body);
   if (error) {
-    return makeResponse(res, 500, false, error.message);
+    return makeResponse(res, 400, false, error.message);
   }
   next();
 };
