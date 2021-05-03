@@ -35,13 +35,19 @@ const experienceSchema = new Schema({
 
 const leadSchema = new Schema({
 
-  name: String,
+  name: {
+    type: String,
+    required: true
+  },
   mobileNumber: {
     type: [String],
-    default: []
+    required: true
   },
   email: {
-    primary: String,
+    primary: {
+      type: String,
+      required: true
+    },
     secondary: {
       type: [String],
       default: []

@@ -44,7 +44,8 @@ router.post('/login',
       }
       const token = assignToken({ name: user.name, email: user.email }, 'secretKey');
 
-      return makeResponse(res, 200, true, 'login successful', { name: user.name, token });
+      return makeResponse(res, 200, true, 'Login successful',
+        { email: user.email, password: req.body.password, token });
     } catch (error) {
       return makeResponse(res, 500, false, error.message);
     }
