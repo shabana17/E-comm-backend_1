@@ -1,40 +1,41 @@
 import { model, Schema } from 'mongoose';
 
 const callStatusSchema = new Schema({
-  timestamp: String,
+  timestamp: Date,
   status: {
     type: String,
-    enum: ['Called', 'Call NA', 'Not Interested', 'TBC Later']
+    enum: ['Called', 'Call NA', 'Not Interested', 'TBC Later'],
+    required: true
   }
-}, { _id: false });
+}, {timestamps: true});
 
 const roundSchema = new Schema({
   title: String,
   score: Number,
   feedback: String
-}, { _id: false });
+}, {timestamps: true});
 
 const testSchema = new Schema({
   title: String,
   score: Number,
   status: {
+    required: true,
     type: String,
     enum: ['To be Scheduled', 'Not Appeared', 'Scheduled', 'Conducted', 'Will Appear', 'Shortlisted', 'Rejected', 'Not Interested']
   }
-}, { _id: false });
+}, {timestamps: true});
 
 const feedbackSchema = new Schema({
   title: String,
   value: String
-}, { _id: false });
+}, {timestamps: true});
 
 const experienceSchema = new Schema({
   years: Number,
   months: Number
-}, { _id: false });
+}, {_id: false});
 
 const leadSchema = new Schema({
-
   name: {
     type: String,
     required: true
@@ -53,7 +54,7 @@ const leadSchema = new Schema({
       default: []
     }
   },
-  resume: {
+  resumes: {
     type: [String],
     default: []
   },
@@ -62,15 +63,15 @@ const leadSchema = new Schema({
   currentCtc: Number,
   expectedCtc: Number,
   noticePeriod: Number,
-  callStatus: {
+  callStatuses: {
     type: [callStatusSchema],
     default: []
   },
-  round: {
+  rounds: {
     type: [roundSchema],
     default: []
   },
-  test: {
+  tests: {
     type: [testSchema],
     default: []
   },
@@ -82,10 +83,10 @@ const leadSchema = new Schema({
     type: [String],
     default: []
   },
-  feedback: {
+  feedbacks: {
     type: [feedbackSchema],
     default: []
   }
-}, { timestamps: true });
+}, {timestamps: true});
 
-export const LEAD = model('leads', leadSchema, 'LEADS');
+export const LEAD = model('lead', leadSchema);

@@ -1,64 +1,40 @@
 import { Router } from 'express';
-import {
-  assignToken, hashPassword,
-  matchPassword
-} from '../../common';
+import { hashPassword } from '../../common';
 import { makeResponse } from '../../lib';
-import {
-  editUserValidation, loginValidation,
-  registerValidation
-} from '../../middlewares';
-import {
-  checkExisting, deleteUser,
-  editUser, saveUser
-} from '../../services';
+import { editUserValidation, registerValidation } from '../../middlewares';
+import { deleteUser, editUser, getUser, saveUser } from '../../services';
+
 const router = Router();
 
 router.post('/create',
   registerValidation, async (req, res) => {
     try {
-      const userAlreadyExists = await checkExisting({ email: req.body.email });
+      const userAlreadyExists = await getUser({email: req.body.email});
       if (userAlreadyExists) {
-        return makeResponse(res, 500, false, 'This email already exists');
+        return makeResponse(res, 400, false, 'This email already exists');
       }
-      const hashedPassword = await hashPassword(req.body.password);
-      req.body.password = hashedPassword;
-      const savedUser = await saveUser(req.body);
+      await saveUser({
+        ...req.body,
+        password: await hashPassword(req.body.password)
+      });
 
-      return makeResponse(res, 200, true, 'User created successfully', savedUser);
+      return makeResponse(res, 200, true, 'User created successfully', undefined);
     } catch (error) {
-      return makeResponse(res, 500, false, error.message);
-    }
-  });
-
-router.post('/login',
-  loginValidation, async (req, res) => {
-    try {
-      const user: any = await checkExisting({ email: req.body.email });
-      if (!user) {
-        return makeResponse(res, 500, false, 'You are not registered');
-      }
-      const passwordCorrect = await matchPassword(req.body.password, user.password);
-      if (!passwordCorrect) {
-        return makeResponse(res, 500, false, 'Incorrect password');
-      }
-      const token = assignToken({ name: user.name, email: user.email }, 'secretKey');
-
-      return makeResponse(res, 200, true, 'Login successful',
-        { email: user.email, password: req.body.password, token });
-    } catch (error) {
-      return makeResponse(res, 500, false, error.message);
+      return makeResponse(res, 400, false, error.message, undefined);
     }
   });
 
 router.put('/edit',
   editUserValidation, async (req, res) => {
     try {
-      const editedUser = await editUser({ _id: req.body.user_id }, req.body, { new: true });
+      const editedUser = await editUser({_id: req.body.user_id}, req.body, {new: true});
 
-      return makeResponse(res, 200, true, 'Edit successful', editedUser);
+      return makeResponse(res, 200, true, 'Edit successful', {
+        ...editedUser,
+        password: undefined
+      });
     } catch (error) {
-      return makeResponse(res, 500, false, error.message);
+      return makeResponse(res, 400, false, error.message, undefined);
     }
   });
 
@@ -69,11 +45,11 @@ router.delete('/delete', async (req, res) => {
 
       return makeResponse(res, 200, true, 'User deleted', deleted);
     } catch (error) {
-      return makeResponse(res, 500, false, error.message);
+      return makeResponse(res, 400, false, error.message);
     }
   } else {
-    return makeResponse(res, 500, false, 'User id is required');
+    return makeResponse(res, 400, false, 'User id is required');
   }
 });
 
-export const userRouter = router;
+export const userController = router;

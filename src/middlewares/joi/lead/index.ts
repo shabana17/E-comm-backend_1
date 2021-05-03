@@ -59,9 +59,9 @@ export const createLeadValidation = (req: any, res: any, next: any) => {
         value: joi.string()
       }))
   });
-  const { value, error } = leadSchema.validate(req.body);
+  const {error} = leadSchema.validate(req.body);
   if (error) {
-    return makeResponse(res, 500, false, error.message);
+    return makeResponse(res, 400, false, error.message);
   }
   next();
 };
@@ -100,9 +100,9 @@ export const editLeadValidation = (req: any, res: any, next: any) => {
         value: joi.string()
       }))
   });
-  const { value, error } = editLead.validate(req.body);
+  const {error} = editLead.validate(req.body);
   if (error) {
-    return makeResponse(res, 500, false, error.message);
+    return makeResponse(res, 400, false, error.message);
   }
   next();
 };

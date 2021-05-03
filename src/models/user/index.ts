@@ -1,7 +1,6 @@
 import { model, Schema } from 'mongoose';
 
 const userSchema = new Schema({
-
   name: {
     type: String,
     required: true,
@@ -20,8 +19,8 @@ const userSchema = new Schema({
   },
   phone: String,
   password: {
-   type: String,
-   required: true
+    type: String,
+    required: true
   },
   department: {
     type: String,
@@ -32,7 +31,7 @@ const userSchema = new Schema({
     type: String,
     enum: ['HR', 'ADMIN', 'USER', 'DEVELOPER'],
     required: true,
-    default: 'DEVELOPER'
+    default: 'USER'
   },
   picture: String,
   status: {
@@ -41,6 +40,8 @@ const userSchema = new Schema({
     required: true,
     default: 'ACTIVE'
   }
-}, { timestamps: true });
+}, {
+  timestamps: true
+});
 
-export const USER = model('users', userSchema, 'USERS');
+export const USER = model('user', userSchema);
