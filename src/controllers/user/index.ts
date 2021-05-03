@@ -17,6 +17,8 @@ const router = Router();
 router.post('/create',
   registerValidation, async (req, res) => {
     try {
+      console.log('in callback');
+      
       const userAlreadyExists = await checkExisting({ email: req.body.email });
       if (userAlreadyExists) {
         return makeResponse(res, 500, false, 'This email already exists');
@@ -27,13 +29,15 @@ router.post('/create',
 
       return makeResponse(res, 200, true, 'User created successfully', savedUser);
     } catch (error) {
-      return makeResponse(res, 500, false, error.message);
+      return makeResponse(res, 400, false, error.message);
     }
   });
 
 router.post('/login',
   loginValidation, async (req, res) => {
     try {
+      
+      
       const user: any = await checkExisting({ email: req.body.email });
       if (!user) {
         return makeResponse(res, 500, false, 'You are not registered');
@@ -45,7 +49,7 @@ router.post('/login',
       const token = assignToken({ name: user.name, email: user.email }, 'secretKey');
 
       return makeResponse(res, 200, true, 'Login successful',
-        { email: user.email, password: req.body.password, token });
+        { token });
     } catch (error) {
       return makeResponse(res, 500, false, error.message);
     }

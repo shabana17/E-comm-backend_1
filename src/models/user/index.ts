@@ -26,7 +26,7 @@ const userSchema = new Schema({
   department: {
     type: String,
     required: true,
-    enum: ['ios', 'android', 'backend', 'frontend-web', 'marketing', 'seo', 'hr']
+    enum: ['IOS', 'ANDROID', 'BACKEND', 'FRONTEND-WEB', 'MARKETING', 'SEO', 'HR']
   },
   role: {
     type: String,

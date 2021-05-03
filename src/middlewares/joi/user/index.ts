@@ -1,7 +1,9 @@
-import joi from 'joi';
+import joi, { allow } from 'joi';
 import { makeResponse } from '../../../lib';
 
 export const registerValidation = (req: any, res: any, next: any) => {
+  console.log(req.body);
+  
   const userSchema = joi.object({
     name: joi.string()
       .required(),
@@ -11,17 +13,19 @@ export const registerValidation = (req: any, res: any, next: any) => {
     gender: joi.string()
       .allow('MALE', 'FEMALE')
       .required(),
-    phone: joi.string(),
+    phone: joi.string()
+    .allow(''),
     password: joi.string()
       .required(),
     department: joi.string()
       .required()
-      .allow('ios', 'android', 'backend', 'frontend-web', 'marketing', 'seo', 'hr'),
+      .allow('IOS', 'ANDROID', 'BACKEND', 'FRONT-WEB', 'MARKETING', 'SEO', 'HR'),
     role: joi.string()
       .allow('HR', 'ADMIN', 'USER', 'DEVELOPER')
       .required()
       .default('DEVELOPER'),
-    picture: joi.string(),
+    picture: joi.string()
+    .allow(''),
     status: joi.string()
       .allow('ACTIVE', 'INACTIVE', 'DELETED')
       .required()
@@ -29,12 +33,16 @@ export const registerValidation = (req: any, res: any, next: any) => {
   });
   const { value, error } = userSchema.validate(req.body);
   if (error) {
+    console.log(error);
+    
     return makeResponse(res, 500, false, error.message);
   }
   next();
 };
 
 export const loginValidation = (req: any, res: any, next: any) => {
+ 
+  
   const loginCredentials = joi.object({
     email: joi.string()
       .required()

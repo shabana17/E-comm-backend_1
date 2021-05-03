@@ -34,7 +34,7 @@ export const createLeadValidation = (req: any, res: any, next: any) => {
       .items(joi.object({
         timestamp: joi.string(),
         status: joi.string()
-          .allow('Called', 'Call NA', 'Not Interested', 'TBC Later')
+          .allow('CALLED', 'CALL_NA', 'NOT_INTERESTED', 'TBC_LATER')
       })),
     round: joi.array()
       .items(joi.object({
@@ -75,7 +75,7 @@ export const editLeadValidation = (req: any, res: any, next: any) => {
       .items(joi.object({
         timestamp: joi.string(),
         status: joi.string()
-          .allow('Called', 'Call NA', 'Not Interested', 'TBC Later')
+          .allow('CALLED', 'CALL_NA', 'NOT_INTERESTED', 'TBC_LATER')
       })),
     round: joi.array()
       .items(joi.object({
