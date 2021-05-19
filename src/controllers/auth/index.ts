@@ -1,29 +1,32 @@
 import { Router } from 'express';
-import { assignToken, matchPassword } from '../../common';
+import { Types } from 'mongoose';
 import { makeResponse } from '../../lib';
-import { loginValidation } from '../../middlewares';
-import { getUser } from '../../services';
-
+import { token } from '../../common'
+import { getUser, setUser } from '../../services/auth';
 const router = Router();
-
-router.post('/login',
-  loginValidation, async (req, res) => {
-    try {
-      const user: any = await getUser({email: req.body.email});
-      if (!user) {
-        return makeResponse(res, 400, false, 'You are not registered');
-      }
-      const passwordCorrect = await matchPassword(req.body.password, user.password);
-      if (!passwordCorrect) {
-        return makeResponse(res, 400, false, 'Incorrect password');
-      }
-      const token = assignToken({name: user.name, email: user.email}, 'secretKey');
-
-      return makeResponse(res, 200, true, 'Login successful',
-        {token});
-    } catch (error) {
-      return makeResponse(res, 400, false, error.message);
+router.post('/signup', async (req, res) => {
+    const users: any = await getUser({ email: req.body.email });
+    if (users) {
+        return makeResponse(res, 400, false, 'Already Registered email');
     }
-  });
-
-export const authController = router;
+    let signupData: any = await setUser({
+        _id: new Types.ObjectId(),
+        username: req.body.username,
+        email: req.body.email,
+        password: req.body.password,
+        location: req.body.location
+    });
+    // const signup={signupData}
+    console.log('sifbbbbb',signupData)
+    return ( makeResponse(res, 200, true, 'User Created',  signupData ));
+});
+router.post('/login', async (req, res) => {
+    const users: any = await getUser({ email: req.body.email, password: req.body.password })
+    if (!users) {
+        return makeResponse(res, 400, false, "Invalid email or password ")
+    } else {
+        const userToken = token({ _id: users._id, username: users.username, email: users.email, location: users.location, password: users.password }, 'jwtPrivateKey')
+        return (makeResponse(res, 200, true, "Succesfully Logged in", { userToken }))
+    }
+})
+export const authController = router

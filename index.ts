@@ -1,5 +1,5 @@
 require('dotenv')
-.config();
+  .config();
 import express from 'express';
 import { appLoader } from './src/loaders/app';
 import { databaseLoader } from './src/loaders/database';

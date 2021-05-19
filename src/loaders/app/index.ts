@@ -3,9 +3,8 @@ import express, { Express } from 'express';
 import { createServer, Server } from 'http';
 import morgan from 'morgan';
 import * as process from 'process';
-
-const PORT = Number(process.env.PORT) || 3000;
-const HOST: string = String(process.env.HOST || '0.0.0.0');
+const PORT = process.env.PORT;
+// const HOST: string = String(process.env.HOST || '0.0.0.0');
 
 const appLoader = async (app: Express, router: any) => new Promise<any>(resolve => {
   const server: Server = createServer(app);
@@ -30,7 +29,7 @@ const appLoader = async (app: Express, router: any) => new Promise<any>(resolve 
         message: 'the resource you are looking for is not found.'
       });
   });
-  server.listen(PORT, HOST, () => {
+  server.listen(PORT, () => {
     console.log('App is running');
     resolve(true);
   });
