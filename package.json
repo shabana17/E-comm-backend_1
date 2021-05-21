@@ -1,5 +1,5 @@
 {
-  "name": "hiring-manager",
+  "name": "e-commerce-backend",
   "version": "1.0.0",
   "main": "index.ts",
   "author": "Tanuj Garg <tanuj@relinns.com>",
@@ -47,5 +47,5 @@
     "tslint": "^6.1.3",
     "typescript": "^4.2.4"
   },
-  "repository": "git@git.relinns.in:internal/hiring-manager/backend.git"
+  "repository": "git@github.com:shabana17/E-commerce-backend.git"
 }

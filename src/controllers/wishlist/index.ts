@@ -8,26 +8,26 @@ const router = Router();
 router.post('/create-wishlist', async (req, res) => {
     const { productId } = req.body;
     const { userId } = req.body;
-    const quantity = req.body.quantity;
+    const quant = req.body.quant;
     const size = req.body.size
     try {
         let users = await Wishlist.findOne({ userId })
         const productDetails = await products.findById(productId);
         if (users) {
             if (productId) {
-                users.items[productId].quantity = users.items[productId].quantity + quantity;
+                users.items[productId].quant= users.items[productId].quant + quant;
                 users.items[productId].size = users.items[productId].size
-                users.items[productId].total = users.items[productId].quantity * productDetails.price;
+                users.items[productId].total = users.items[productId].quant * productDetails.price;
                 users.items[productId].price = productDetails.price
                 users.subTotal = users.items.map((item: any) => item.total).reduce((acc: any, next: any) => acc + next);
             }
-            else if (quantity > 0) {
+            else if (quant > 0) {
                 users.items.push({
                     productId: productId,
-                    quantity: quantity,
+                    quant: quant,
                     size: size,
                     price: productDetails.price,
-                    total: productDetails.price * quantity
+                    total: productDetails.price * quant
                 })
                 users.subTotal = users.items.map((item: any) => item.total).reduce((acc: any, next: any) => acc + next);
             }
@@ -44,12 +44,12 @@ router.post('/create-wishlist', async (req, res) => {
                 items: [{
                     userId: userId,
                     productId: productId,
-                    quantity: quantity,
+                    quant: quant,
                     size: size,
                     price: productDetails.price,
-                    total: (productDetails.price * quantity)
+                    total: (productDetails.price * quant)
                 }],
-                subTotal: (productDetails.price * quantity)
+                subTotal: (productDetails.price * quant)
             }
             let carts = new Wishlist(cartData);
             let datas = await carts.save();
@@ -68,7 +68,7 @@ router.put('/edit-wishlist/:id', async (req, res) => {
     let pr: any = await Wishlist.findByIdAndUpdate({ _id: req.params.id }, {
         $set: {
             items: [{
-                quantity: req.body.quantity,
+                quant: req.body.quant,
 
             }]
         }

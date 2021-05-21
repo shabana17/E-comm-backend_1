@@ -14,7 +14,7 @@ const WishlistSchema: Schema = new Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: products,
     },
-    quantity: {
+    quant: {
       type: Number,
       required: true,
       min: [1, 'Quantity can not be less then 1.']
